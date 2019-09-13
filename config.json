@@ -1,0 +1,5 @@
+{
+  "issuer": "http://www.okta.com/exk1bten8uUCnT4Kn357",
+  "entryPoint": "https://dev-416519.okta.com/app/celaddev416519_oktasaml_1/exk1bten8uUCnT4Kn357/sso/saml",
+  "cert": "./okta_cert.pem"
+}

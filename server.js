@@ -4,11 +4,17 @@
 "use strict";
 process.title = "node-chat";
 
-const webSocketServerPort = 1337;
+const webSocketServerPort = 3000;
 const WebSocketServer = require('websocket').server;
 const http = require('http');
 const express = require("express");
 const path = require("path");
+const compression = require("compression");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const auth = require("./auth");
+
 let history = [];
 
 let clients = [];
@@ -24,10 +30,42 @@ const app = express();
 //code for importing static files
 app.use(express.static(path.join(__dirname)));
 
-app.get(function(req, res){
-	res.sendFile(__dirname + "/index.html");
+app.use(compression());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser("secrettext"));
+
+app.use(session(
+		{   secret: "secrettext",
+			resave: true,
+			saveUninitialized: true,
+			cookie:{httpOnly:true},
+			}));
+
+app.use(auth.initialize());
+app.use(auth.session());
+
+app.get('/', auth.protected, function(req, res){
+	res.redirect('/home');
 });
 
+app.get('/home', auth.protected, function(req, res){
+	res.sendFile(__dirname + "/index.html");
+});
+//GET login, Call passport authentication method
+
+app.get('/login', auth.authenticate('saml', {failureRedirect: '/login', failureFlash: true}),
+		function(req, res){
+			res.sendFile(__dirname + "/login.html");
+		}	
+)
+
+// POST methods, redirect to home successful login
+app.post('/login/callback', auth.authenticate('saml', {failureRedirect: '/login', failureFlash: true}),
+		function(req, res){
+			  res.redirect('/home');
+		}
+)
 
 const httpServer= app.listen(webSocketServerPort, function() { 
 	console.log((new Date()) + "Server is listening on port "+ webSocketServerPort);
