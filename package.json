@@ -10,7 +10,9 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "express": "^4.17.1",
     "node-static": "^0.7.11",
+    "path": "^0.12.7",
     "socket.io": "^2.2.0",
     "websocket": "^1.0.29"
   }

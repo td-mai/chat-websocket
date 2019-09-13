@@ -7,8 +7,8 @@ process.title = "node-chat";
 const webSocketServerPort = 1337;
 const WebSocketServer = require('websocket').server;
 const http = require('http');
-
-
+const express = require("express");
+const path = require("path");
 let history = [];
 
 let clients = [];
@@ -19,13 +19,17 @@ function htmlEntities(str){
 			).replace('/>/g', '&gt;').replace('/"/g', '&quot;');
 	
 }
-//http server
-const server = http.createServer(function(request, response) {
-  // process HTTP request. Since we're writing just WebSockets
-  // server we don't have to implement anything.
+
+const app = express();
+//code for importing static files
+app.use(express.static(path.join(__dirname)));
+
+app.get(function(req, res){
+	res.sendFile(__dirname + "/index.html");
 });
 
-server.listen(webSocketServerPort, function() { 
+
+const httpServer= app.listen(webSocketServerPort, function() { 
 	console.log((new Date()) + "Server is listening on port "+ webSocketServerPort);
 });
 
@@ -33,7 +37,7 @@ server.listen(webSocketServerPort, function() {
 const wsServer = new WebSocketServer({
 	  // WebSocket server is tied to a HTTP server. WebSocket
 	  // request is just an enhanced HTTP request. 
-  httpServer: server
+  httpServer: httpServer
 });
 
 // WebSocket server
