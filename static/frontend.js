@@ -10,9 +10,8 @@ $(function () {
   let status = $('#status');
   
   let myColor = false;
-  
-  let myName = false;
-  
+  let myName =  false;
+
 //if user is running mozilla then use it's built-in WebSocket
   window.WebSocket = window.WebSocket || window.MozWebSocket;
 
@@ -32,7 +31,7 @@ $(function () {
     // connection is opened and ready to use
 	 // first user enters his name
 	    input.removeAttr('disabled');
-	    status.text('Choose name:')
+	    status.text('Choose name:');
   };
 
   connection.onerror = function (error) {
@@ -103,7 +102,8 @@ $(function () {
    * Add message to the chat window
    */
   function addMessage(author, message, color, dt) {
-    content.append('<p><span style="color:' + color + '">'
+	let align = (author===myName) ?"right":"left";
+    content.append('<p align="'+ align+'"><span style="color:' + color + '">'
         + author + '</span> @ ' + (dt.getHours() < 10 ? '0'
         + dt.getHours() : dt.getHours()) + ':'
         + (dt.getMinutes() < 10

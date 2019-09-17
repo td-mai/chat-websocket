@@ -35,11 +35,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser("secrettext"));
 
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
 app.use(session(
 		{   secret: "secrettext",
 			resave: true,
 			saveUninitialized: true,
-			cookie:{httpOnly:true},
+			cookie:{httpOnly:false},
 			}));
 
 app.use(auth.initialize());
@@ -50,7 +53,8 @@ app.get('/', auth.protected, function(req, res){
 });
 
 app.get('/home', auth.protected, function(req, res){
-	res.sendFile(__dirname + "/index.html");
+	res.render(__dirname + "/index.html", {request:req});
+	console.log(req.session.passport.user);
 });
 //GET login, Call passport authentication method
 
@@ -81,6 +85,7 @@ const wsServer = new WebSocketServer({
 // WebSocket server
 wsServer.on('request', function(request) {
 	console.log((new Date()) + 'Connection form origin ' + request.origin + ' .');
+	console.log(" cookie : "+ JSON.stringify(request.cookies));
 	let connection = request.accept(null, request.origin);
 	
 	let index = clients.push(connection) -1;
