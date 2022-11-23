@@ -21,7 +21,7 @@
     "passport": "^0.4.0",
     "passport-saml": "^1.2.0",
     "path": "^0.12.7",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "websocket": "^1.0.29"
   }
 }
