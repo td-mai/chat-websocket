@@ -10,11 +10,11 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
     "ejs": "^2.7.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "express-session": "^1.16.2",
     "fs": "0.0.1-security",
     "node-static": "^0.7.11",
